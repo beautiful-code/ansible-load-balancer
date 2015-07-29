@@ -1,0 +1,8 @@
+# vim:ft=ansible:
+---
+
+# Nginx restart handler
+- name: restart nginx
+  service: name=nginx state=restarted
+
+

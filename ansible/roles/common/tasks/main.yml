@@ -1,0 +1,9 @@
+# vim:ft=ansible:
+---
+
+# Common tasks to be performed on all the nodes
+
+# Run apt-get update and install git
+- name: install git
+  apt: name=git state=installed update_cache=yes
+
