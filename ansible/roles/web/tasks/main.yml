@@ -1,6 +1,15 @@
 # vim:ft=ansible:
 ---
 
+# Tasks are executed in the order which you have defined
+
+# Pre task block
+# Take down node to maintenance mode
+- name: disable server in haproxy
+  shell: echo "disable server staticsite/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+  delegate_to: "{{ item }}"
+  with_items: groups.lb
+
 # Install nginx
 - name: install nginx
   apt: name=nginx state=installed
@@ -15,8 +24,19 @@
   template: src=default-site.j2 dest=/etc/nginx/sites-available/default
   notify: restart nginx
 
-# Replace the index.html
-- name: update website content
-  template: src=index.html.j2 dest=/usr/share/nginx/html/index.html
+- name: clean existing website content
+  file: path=/usr/share/nginx/html/ state=absent
+
+- name: deploy website content
+  git: repo=https://github.com/beautiful-code/ansible-static-site.git
+        dest=/usr/share/nginx/html/
+        version={{ site_version }}
+
+# Post task block
+# Enable traffic on the node
+- name: enable server in haproxy
+  shell: echo "enable server staticsite/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+  delegate_to: "{{ item }}"
+  with_items: groups.lb
 
 

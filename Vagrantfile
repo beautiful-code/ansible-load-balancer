@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     management_config.vm.hostname = "management"
     management_config.vm.network :private_network, ip: "10.0.15.10"
     management_config.vm.provider "virtualbox" do |vb|
-      vb.memory = "256"
+      vb.memory = "512"
     end
     management_config.vm.provision :shell, path: "bootstrap/management.sh"
   end
@@ -29,12 +29,11 @@ Vagrant.configure("2") do |config|
 
   # create some web servers
   # https://docs.vagrantup.com/v2/vagrantfile/tips.html
-  (1..2).each do |i|
+  (1..4).each do |i|
     config.vm.define "web#{i}" do |node|
       node.vm.box = "ubuntu/trusty64"
       node.vm.hostname = "web#{i}"
       node.vm.network :private_network, ip: "10.0.15.2#{i}"
-      node.vm.network "forwarded_port", guest: 80, host: "808#{i}"
       node.vm.provider "virtualbox" do |vb|
         vb.memory = "256"
       end
