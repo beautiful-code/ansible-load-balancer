@@ -1,6 +1,0 @@
-# vim:ft=ansible:
----
-
-# Site release versions
-# https://github.com/itsprdp/itsprdp.github.io/releases
-site_version: v2.0

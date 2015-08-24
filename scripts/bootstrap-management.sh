@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-# install ansible (http://docs.ansible.com/intro_installation.html)
-apt-get -y install software-properties-common
-apt-add-repository -y ppa:ansible/ansible
-apt-get update
-apt-get -y install ansible
+if ! sudo dpkg -l | grep -qw ansible; then
+  # install ansible (http://docs.ansible.com/intro_installation.html)
+  apt-get -y install software-properties-common
+  apt-add-repository -y ppa:ansible/ansible
+  apt-get update
+  apt-get -y install ansible
+fi
 
 # copy examples into /home/vagrant (from inside the management node)
 cp -a /vagrant/ansible/* /home/vagrant
