@@ -1,24 +1,27 @@
 # vim:ft=ansible:
 ---
-
-# common
+# common role tasks
 - hosts: all
   sudo: yes
+  remote_user: vagrant
   gather_facts: no
 
   roles:
     - common
 
-# web
+# web role tasks
 - hosts: web
   sudo: yes
+  serial: 1
+  remote_user: vagrant
 
   roles:
     - web
 
-# lb
+# load balancer role tasks
 - hosts: lb
   sudo: yes
+  remote_user: vagrant
 
   roles:
     - lb
